@@ -42,8 +42,11 @@ bot.on('message', async (message) =>{
                 console.log('GOOD')
                 serverStatus = 'Online!'
 
-                statusOutput = response;
+                
+                serverVer = response.version
+                players = response.onlinePlayers
                 console.log(serverStatus)
+                statusOutput = response;
             })
             .catch((error) => {
                 console.log('BAD!')
@@ -55,9 +58,10 @@ bot.on('message', async (message) =>{
             Embed = new Discord.MessageEmbed()
             .setTitle('Server Status')
             .addField('Current Server Status', serverStatus)
+            .addField('Server Version', serverVer)
+            .addField('Current number of players',players)
             
             message.channel.send(Embed)
-            console.log(statusOutput)
             console.log("successful print")
         break
 
