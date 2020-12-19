@@ -45,7 +45,7 @@ bot.on('message', async (message) =>{
                 
                 serverVer = response.version
                 players = response.onlinePlayers
-                console.log(serverStatus)
+                //console.log(serverStatus)
                 statusOutput = response;
             })
             .catch((error) => {
