@@ -31,39 +31,49 @@ bot.on('message', async (message) =>{
     let args = message.content.substring(PREFIX.length).split(' ')
     // Type "!mc" to update status
     switch(args[0]){
+
         case 'mc':
+            try{
 
-            client.commands.get('clear').execute(message,args)
-            statusOutput = 'zzz....'
-            serverStatus = 'Offline.'
+                let x = await client.commands.get('clear').execute(message,args)
+                statusOutput = 'zzz....'
+                serverStatus = 'Offline.'
 
-            let response = await util.status(ip, { port, enableSRV: true, timeout: 5000, protocolVersion: 47 })
-            .then((response) => {
-                console.log('GOOD')
-                serverStatus = 'Online!'
+                let response = await util.status(ip, { port, enableSRV: true, timeout: 5000, protocolVersion: 47 })
+                .then((response) => {
+                    console.log('GOOD')
+                    serverStatus = 'Online!'
 
+                    
+                    serverVer = response.version
+                    players = response.onlinePlayers
+                    console.log(serverStatus)
+                    statusOutput = response;
+                })
+                .catch((error) => {
+                    console.log('BAD!')
+
+                    statusOutput = 'Error.'
+                    throw error;
+                });
+
+                Embed = new Discord.MessageEmbed()
+                .setTitle('Server Status')
+                .addField('Current Server Status', serverStatus)
+                .addField('Server Version', serverVer)
+                .addField('Current number of players',players)
                 
-                serverVer = response.version
-                players = response.onlinePlayers
-                //console.log(serverStatus)
-                statusOutput = response;
-            })
-            .catch((error) => {
-                console.log('BAD!')
-
-                statusOutput = 'Error.'
-                throw error;
-            });
-
+                message.channel.send(Embed)
+                console.log("successful print")
+            break
+        }
+        catch(err){
+            console.log('Error')
             Embed = new Discord.MessageEmbed()
             .setTitle('Server Status')
-            .addField('Current Server Status', serverStatus)
-            .addField('Server Version', serverVer)
-            .addField('Current number of players',players)
-            
+            .addField('Current Server Status', 'Offline.')
             message.channel.send(Embed)
-            console.log("successful print")
-        break
+        }
 
     }
 
